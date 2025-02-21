@@ -4,4 +4,3 @@ export enum HousingType {
   room = 'room',
   hotel = 'hotel',
 }
-
