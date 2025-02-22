@@ -35,8 +35,8 @@ export class TSVFileReader implements FileReader {
       city,
       image,
       housingImages,
-      // premium,
-      // favorite,
+      premium,
+      favorite,
       rating,
       housingType,
       rooms,
@@ -58,13 +58,13 @@ export class TSVFileReader implements FileReader {
       city: City[city as  'Paris' | 'Cologne' | 'Brussels' | 'Amsterdam' | 'Hamburg' | 'Dusseldorf'],
       image,
       housingImages,
-      premium: Boolean(),
-      favorite: Boolean(),
-      rating: this.parseNumber(rating),
+      premium: this.parseBoolean(premium),
+      favorite: this.parseBoolean(favorite),
+      rating: this.parseFloat(rating),
       housingType: HousingType[housingType as 'apartment' | 'house' | 'room' | 'hotel'],
-      rooms: this.parseNumber(rooms),
-      guests: this.parseNumber(guests),
-      price: this.parseNumber(price),
+      rooms: this.parseInteger(rooms),
+      guests: this.parseInteger(guests),
+      price: this.parseInteger(price),
       facilities: this.parseFacilities(facilities),
       user: this.parseUser(name, email, avatarPath, password, UserType[userType as 'usual' | 'pro']),
       coordinates
@@ -75,8 +75,16 @@ export class TSVFileReader implements FileReader {
     return facilitiesString.split(this.prop_separator).map((name) => ({ name }));
   }
 
-  private parseNumber(priceString: string): number {
-    return Number.parseInt(priceString, 10);
+  private parseInteger(intString: string): number {
+    return Number.parseInt(intString, 10);
+  }
+
+  private parseFloat(floatString: string): number {
+    return Number(parseFloat(floatString).toFixed(1));
+  }
+
+  private parseBoolean(boolString: string): boolean {
+    return (boolString.toLowerCase() === 'true');
   }
 
   private parseUser(name: string, email: string, avatarPath: string, password: string, type: UserType): User {
