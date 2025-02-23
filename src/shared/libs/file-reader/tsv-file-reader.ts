@@ -7,7 +7,7 @@ import { UserType } from "../../types/user-type.type.js";
 
 export class TSVFileReader implements FileReader {
   private rawData = '';
-  private str_separator = '\t';
+  private ent_separator = '\t';
   private prop_separator = ';';
 
   constructor(
@@ -49,7 +49,7 @@ export class TSVFileReader implements FileReader {
       password,
       userType,
       coordinates,
-    ] = line.split(this.str_separator);
+    ] = line.split(this.ent_separator);
 
     return {
       title,
