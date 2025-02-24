@@ -1,9 +1,15 @@
 import { readFileSync } from 'node:fs';
 
 import { FileReader } from './file-reader.interface.js';
-import { City, User, Offer } from '../../types/index.js';
-import { HousingType } from "../../types/housing-type.enum.js";
-import { UserType } from "../../types/user-type.type.js";
+import {
+  Offer,
+  CityType,
+  UserType,
+  UserTypeEnum,
+  HousingTypeEnum,
+  FacilitiesEnum,
+  CoordinatesType
+} from '../../types/index.js';
 
 export class TSVFileReader implements FileReader {
   private rawData = '';
@@ -34,7 +40,7 @@ export class TSVFileReader implements FileReader {
       createdDate,
       city,
       image,
-      housingImages,
+      images,
       premium,
       favorite,
       rating,
@@ -55,40 +61,41 @@ export class TSVFileReader implements FileReader {
       title,
       description,
       postDate: new Date(createdDate),
-      city: City[city as  'Paris' | 'Cologne' | 'Brussels' | 'Amsterdam' | 'Hamburg' | 'Dusseldorf'],
+      city: city as CityType,
       image,
-      housingImages,
+      images: this.parseImages(images),
       premium: this.parseBoolean(premium),
       favorite: this.parseBoolean(favorite),
-      rating: this.parseFloat(rating),
-      housingType: HousingType[housingType as 'apartment' | 'house' | 'room' | 'hotel'],
-      rooms: this.parseInteger(rooms),
-      guests: this.parseInteger(guests),
-      price: this.parseInteger(price),
+      rating: Number(parseFloat(rating).toFixed(1)),
+      housingType: housingType as HousingTypeEnum,
+      rooms: Number(rooms),
+      guests: Number(guests),
+      price: Number(price),
       facilities: this.parseFacilities(facilities),
-      user: this.parseUser(name, email, avatarPath, password, UserType[userType as 'usual' | 'pro']),
-      coordinates
+      user: this.parseUser(name, email, avatarPath, password, userType as UserTypeEnum),
+      coordinates:this.parseCoordinates(coordinates),
     };
   }
 
-  private parseFacilities(facilitiesString: string): { name: string }[] {
-    return facilitiesString.split(this.prop_separator).map((name) => ({ name }));
-  }
-
-  private parseInteger(intString: string): number {
-    return Number.parseInt(intString, 10);
-  }
-
-  private parseFloat(floatString: string): number {
-    return Number(parseFloat(floatString).toFixed(1));
+  private parseImages(imagesString: string): string[] {
+    return imagesString.split(this.prop_separator);
   }
 
   private parseBoolean(boolString: string): boolean {
-    return (boolString.toLowerCase() === 'true');
+    return boolString.toLowerCase() === 'true';
   }
 
-  private parseUser(name: string, email: string, avatarPath: string, password: string, type: UserType): User {
+  private parseFacilities(facilitiesString: string): FacilitiesEnum[] {
+    return facilitiesString.split(this.prop_separator) as FacilitiesEnum[];
+  }
+
+  private parseUser(name: string, email: string, avatarPath: string, password: string, type: UserTypeEnum): UserType {
     return { name, email, avatarPath, password, type };
+  }
+
+  private parseCoordinates(coordinates: string): CoordinatesType {
+    let [lat, long] = coordinates.split(this.prop_separator);
+    return { lat: Number(lat), long: Number(long) };
   }
 
   public read(): void {

@@ -1,4 +1,7 @@
-export { City } from './city.type.js';
-export { Facilities } from './facilities.type.js';
-export { User } from './user.type.js';
+export { CityType } from './city.type.js';
+export { FacilitiesEnum } from './facilities.enum.js';
+export { UserType } from './user.type.js';
+export { UserTypeEnum } from './user-type.enum.js';
 export { Offer } from './offer.type.js';
+export { CoordinatesType } from './coordinates.type.js';
+export { HousingTypeEnum } from './housing-type.enum.js';
