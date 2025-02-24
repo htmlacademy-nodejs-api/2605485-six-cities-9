@@ -1,9 +1,9 @@
 import {
   CityType,
-  UserType,
   HousingTypeEnum,
   FacilitiesEnum,
-  CoordinatesType
+  CoordinatesType,
+  UserType
 } from './index.js';
 
 export type Offer = {

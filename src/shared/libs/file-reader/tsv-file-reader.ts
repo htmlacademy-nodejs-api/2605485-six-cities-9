@@ -5,7 +5,6 @@ import {
   Offer,
   CityType,
   UserType,
-  UserTypeEnum,
   HousingTypeEnum,
   FacilitiesEnum,
   CoordinatesType
@@ -49,11 +48,7 @@ export class TSVFileReader implements FileReader {
       guests,
       price,
       facilities,
-      name,
-      email,
-      avatarPath,
-      password,
-      userType,
+      user,
       coordinates,
     ] = line.split(this.ent_separator);
 
@@ -72,7 +67,7 @@ export class TSVFileReader implements FileReader {
       guests: Number(guests),
       price: Number(price),
       facilities: this.parseFacilities(facilities),
-      user: this.parseUser(name, email, avatarPath, password, userType as UserTypeEnum),
+      user: this.parseUser(user),
       coordinates:this.parseCoordinates(coordinates),
     };
   }
@@ -89,8 +84,9 @@ export class TSVFileReader implements FileReader {
     return facilitiesString.split(this.prop_separator) as FacilitiesEnum[];
   }
 
-  private parseUser(name: string, email: string, avatarPath: string, password: string, type: UserTypeEnum): UserType {
-    return { name, email, avatarPath, password, type };
+  private parseUser(userString: string): UserType {
+    let [name, email, avatarPath, password, isPro] = userString.split(this.prop_separator);
+    return { name, email, avatarPath, password, isPro: isPro.toLowerCase() === 'true' };
   }
 
   private parseCoordinates(coordinates: string): CoordinatesType {
