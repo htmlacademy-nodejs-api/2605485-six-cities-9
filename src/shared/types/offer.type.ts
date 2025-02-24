@@ -14,7 +14,7 @@ export type Offer = {
   image: string;
   images: string[];
   premium: boolean;
-  favorite: boolean;
+  // favorite: boolean;
   rating: number;
   housingType: HousingTypeEnum;
   rooms: number;
